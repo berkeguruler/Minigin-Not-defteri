@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Minik'in Not Defteri</title>
+    
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="MinikNot">
+    
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23ffafcc'%3E%3Cpath d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z'/%3E%3C/svg%3E">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23ffafcc'%3E%3Cpath d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z'/%3E%3C/svg%3E">
+
+    <style>
+        :root {
+            --ana-renk: #ffafcc;
+            --arka-plan: #fdf0d5;
+            --buton-renk: #a2d2ff;
+            --vurgu-renk: #ff8fab;
+            --yazi-renk: #5d5d5d;
+            --klasor-renk: #bde0fe;
+            --surpriz-renk: #ffc8dd;
+        }
+
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--arka-plan);
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40'%3E%3Cpath d='M20 35l-1.5-1.4C13.2 28.9 9.7 25.8 9.7 21.9c0-3.1 2.5-5.6 5.6-5.6 1.8 0 3.5 0.8 4.7 2.1 1.2-1.3 2.9-2.1 4.7-2.1 3.1 0 5.6 2.5 5.6 5.6 0 3.9-3.5 7-8.8 11.7L20 35z' fill='%23ffb1c1' fill-opacity='0.12'/%3E%3C/svg%3E");
+            margin: 0; padding: 0;
+            display: flex; justify-content: center;
+            height: 100vh; width: 100vw;
+            overflow: hidden;
+        }
+
+        /* Giriş Ekranı */
+        #splash-screen {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--ana-renk);
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            z-index: 2000;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .heart-icon {
+            font-size: 5rem;
+            animation: beat 1.2s infinite;
+            margin-bottom: 20px;
+        }
+
+        @keyframes beat {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        #splash-screen h1 { color: white; font-size: 2.6rem; margin: 0; text-shadow: 2px 2px 4px rgba(0,0,0,0.1); }
+        .made-by { color: white; opacity: 0.9; font-size: 0.85rem; margin-bottom: 30px; letter-spacing: 1px; }
+
+        .enter-btn {
+            background: white; color: var(--vurgu-renk);
+            padding: 15px 40px; border-radius: 50px;
+            font-weight: bold; border: none; cursor: pointer;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+        }
+
+        /* Ana Konteyner */
+        .container {
+            width: 100%; max-width: 450px; height: 100%;
+            display: none; flex-direction: column; background: white;
+        }
+
+        .app-header {
+            padding: 15px 20px; background: white; border-bottom: 1px solid #f0f0f0;
+            display: flex; align-items: center; justify-content: space-between;
+        }
+
+        .back-to-splash { color: var(--vurgu-renk); font-weight: bold; cursor: pointer; }
+        .app-title { color: var(--yazi-renk); font-weight: bold; }
+
+        .app-content {
+            flex: 1; overflow-y: auto; padding: 20px; background: #fdfcfb;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        #love-counter {
+            background: #fff; padding: 20px; border-radius: 25px;
+            margin-bottom: 20px; text-align: center;
+            border: 2px solid var(--surpriz-renk);
+            box-shadow: 0 5px 15px rgba(255,175,204,0.1);
+        }
+        #love-days { font-size: 2.5rem; font-weight: bold; color: var(--vurgu-renk); margin: 5px 0; }
+        
+        .quick-actions { display: flex; gap: 12px; margin-bottom: 20px; }
+        .action-tab {
+            flex: 1; padding: 15px; border-radius: 20px;
+            text-align: center; color: #5d5d5d; font-weight: bold; cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+        .folder-tab { background: var(--klasor-renk); }
+        .gift-tab { background: var(--surpriz-renk); }
+
+        .note-form {
+            background: white; padding: 20px; border-radius: 25px;
+            border: 1px solid #f0f0f0; margin-bottom: 20px;
+        }
+        .note-form h2 { color: var(--vurgu-renk); text-align: center; margin-bottom: 15px; font-size: 1.2rem; }
+
+        input, textarea {
+            width: 100%; border: 2px solid #f7f7f7; border-radius: 15px;
+            padding: 12px; margin-bottom: 10px; outline: none; background: #fcfcfc;
+        }
+
+        .mood-selector {
+            display: flex; justify-content: space-around; margin-bottom: 15px;
+            background: #fdfdfd; padding: 10px; border-radius: 15px;
+        }
+        .mood-emoji { font-size: 1.6rem; cursor: pointer; opacity: 0.4; transition: 0.3s; }
+        .mood-emoji.active { opacity: 1; transform: scale(1.2); }
+
+        .app-footer {
+            padding: 15px; background: white; border-top: 1px solid #eee;
+            display: flex; gap: 10px; padding-bottom: calc(15px + env(safe-area-inset-bottom));
+        }
+
+        button.action-btn {
+            flex: 1; border: none; padding: 14px; border-radius: 18px;
+            font-weight: bold; font-size: 1rem; cursor: pointer;
+        }
+        .img-btn { background: var(--buton-renk); color: white; }
+        .save-btn { background: var(--vurgu-renk); color: white; }
+
+        #preview-img { width: 100%; border-radius: 15px; margin-bottom: 10px; display: none; }
+
+        #archive-panel {
+            position: fixed; bottom: -100%; left: 0; width: 100%; height: 95%;
+            background: white; border-radius: 30px 30px 0 0; z-index: 1500;
+            transition: bottom 0.4s ease; display: flex; flex-direction: column;
+        }
+        #archive-panel.open { bottom: 0; }
+        #notes-container { flex: 1; padding: 20px; overflow-y: auto; background: #fbfbfb; }
+
+        .note-card {
+            background: white; padding: 15px; border-radius: 20px; margin-bottom: 15px;
+            border-left: 6px solid var(--ana-renk); position: relative;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.03);
+        }
+        .delete-btn { position: absolute; top: 10px; right: 10px; color: #ffcccc; font-size: 1.4rem; cursor: pointer; }
+        
+        #gift-popup {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.4); display: none; justify-content: center; align-items: center; z-index: 3000;
+        }
+        .gift-content { background: white; padding: 30px; border-radius: 25px; text-align: center; width: 80%; }
+    </style>
+</head>
+<body>
+
+    <div id="splash-screen">
+        <div class="heart-icon">💖</div>
+        <h1>Hoşgeldin Minik</h1>
+        <div class="made-by">Made in Berke</div>
+        <button class="enter-btn" onclick="toggleApp(true)">🌸 Notlarıma Gir</button>
+    </div>
+
+    <div class="container" id="app">
+        <div class="app-header">
+            <div class="back-to-splash" onclick="toggleApp(false)">⬅ Geri</div>
+            <div class="app-title">Not Defterimiz</div>
+            <div style="width:30px;"></div>
+        </div>
+
+        <div class="app-content">
+            <div id="love-counter">
+                <h3 style="margin:0; opacity:0.7; font-size:0.9rem;">Biz Tam</h3>
+                <div id="love-days">0</div>
+                <p style="margin:0; color:#888; font-size:0.8rem;">Gündür Beraberiz 💖</p>
+            </div>
+
+            <div class="quick-actions">
+                <div class="action-tab folder-tab" onclick="openArchive()">📁 Notlarım</div>
+                <div class="action-tab gift-tab" onclick="showGift()">🎁 Sürpriz Kutusu</div>
+            </div>
+
+            <div class="note-form">
+                <h2>Notunu Ekle Sevgilim</h2>
+                <input type="date" id="date-input">
+                <div class="mood-selector">
+                    <span class="mood-emoji active" onclick="setMood('😊', this)">😊</span>
+                    <span class="mood-emoji" onclick="setMood('😍', this)">😍</span>
+                    <span class="mood-emoji" onclick="setMood('🥰', this)">🥰</span>
+                    <span class="mood-emoji" onclick="setMood('🥳', this)">🥳</span>
+                </div>
+                <textarea id="text-input" placeholder="Neler yazmak istersin sevgilim?..." rows="4"></textarea>
+                <img id="preview-img">
+            </div>
+        </div>
+
+        <div class="app-footer">
+            <button class="action-btn img-btn" onclick="document.getElementById('file-input').click()">🖼️ Resim</button>
+            <button class="action-btn save-btn" onclick="addNote()">Kaydet</button>
+            <input type="file" id="file-input" hidden accept="image/*">
+        </div>
+    </div>
+
+    <div id="archive-panel">
+        <div style="padding:15px; border-bottom:1px solid #eee; display:flex; justify-content:space-between; align-items:center;">
+            <h3 style="margin:0">Not Defterimiz</h3>
+            <span style="font-size:2rem; cursor:pointer;" onclick="closeArchive()">×</span>
+        </div>
+        <div id="notes-container"></div>
+    </div>
+
+    <div id="gift-popup" onclick="closeGift()">
+        <div class="gift-content" onclick="event.stopPropagation()">
+            <div style="font-size:3rem;">🎁</div>
+            <div id="gift-text" style="font-weight:bold; color:var(--vurgu-renk); margin-top:15px;"></div>
+            <button onclick="closeGift()" style="margin-top:20px; border:none; background:var(--ana-renk); color:white; padding:10px 20px; border-radius:15px;">Kapat</button>
+        </div>
+    </div>
+
+    <script>
+        let selectedMood = "😊";
+        let selectedImg = "";
+        
+        // TANIŞMA TARİHİ: 13 Nisan 2026
+        const anniversaryDate = new Date(2026, 3, 13); 
+
+        function updateCounter() {
+            const now = new Date();
+            const diffTime = Math.abs(now - anniversaryDate);
+            const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+            document.getElementById('love-days').innerText = diffDays;
+        }
+
+        function toggleApp(show) {
+            if(show) {
+                document.getElementById('splash-screen').style.transform = "translateY(-100%)";
+                document.getElementById('app').style.display = "flex";
+                updateCounter();
+                loadNotes();
+            } else {
+                document.getElementById('splash-screen').style.transform = "translateY(0)";
+            }
+        }
+
+        function setMood(emoji, el) {
+            selectedMood = emoji;
+            document.querySelectorAll('.mood-emoji').forEach(e => e.classList.remove('active'));
+            el.classList.add('active');
+        }
+
+        document.getElementById('file-input').onchange = (e) => {
+            const reader = new FileReader();
+            reader.onload = () => {
+                selectedImg = reader.result;
+                document.getElementById('preview-img').src = selectedImg;
+                document.getElementById('preview-img').style.display = "block";
+                setTimeout(() => { document.querySelector('.app-content').scrollTop = document.querySelector('.app-content').scrollHeight; }, 100);
+            };
+            reader.readAsDataURL(e.target.files[0]);
+        };
+
+        function addNote() {
+            const text = document.getElementById('text-input').value;
+            const date = document.getElementById('date-input').value;
+            if(!text) return;
+            const notes = JSON.parse(localStorage.getItem('minik_notlar_final') || '[]');
+            notes.unshift({ id: Date.now(), text, date, mood: selectedMood, img: selectedImg });
+            localStorage.setItem('minik_notlar_final', JSON.stringify(notes));
+            document.getElementById('text-input').value = "";
+            document.getElementById('preview-img').style.display = "none";
+            selectedImg = "";
+            loadNotes();
+            openArchive();
+        }
+
+        function loadNotes() {
+            const container = document.getElementById('notes-container');
+            const notes = JSON.parse(localStorage.getItem('minik_notlar_final') || '[]');
+            container.innerHTML = notes.map(n => `
+                <div class="note-card">
+                    <span class="delete-btn" onclick="deleteNote(${n.id})">×</span>
+                    <small>📅 ${n.date} ${n.mood}</small>
+                    <p style="white-space:pre-wrap;">${n.text}</p>
+                    ${n.img ? `<img src="${n.img}" style="width:100%; border-radius:10px; margin-top:10px;">` : ''}
+                </div>
+            `).join('');
+        }
+
+        function deleteNote(id) {
+            if(confirm("Silmek istediğine emin misin minik?")) {
+                let notes = JSON.parse(localStorage.getItem('minik_notlar_final')).filter(n => n.id !== id);
+                localStorage.setItem('minik_notlar_final', JSON.stringify(notes));
+                loadNotes();
+            }
+        }
+
+        function openArchive() { document.getElementById('archive-panel').classList.add('open'); }
+        function closeArchive() { document.getElementById('archive-panel').classList.remove('open'); }
+
+        const surprises = ["Sana kocaman bir sarılma! 🤗", "En sevdiğin tatlıdan benden! 🍰", "İstediğin bir filmi izleme hakkı! 🍿", "Sana özel upuzun bir mesaj borcum olsun! ✍️", "Beraber harika bir yemek! 🍕"];
+        function showGift() {
+            document.getElementById('gift-text').innerText = surprises[Math.floor(Math.random() * surprises.length)];
+            document.getElementById('gift-popup').style.display = "flex";
+        }
+        function closeGift() { document.getElementById('gift-popup').style.display = "none"; }
+
+        document.getElementById('date-input').valueAsDate = new Date();
+    </script>
+</body>
+</html>
